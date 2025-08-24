@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./SupplierForm.css";
 
 const initialState = {
@@ -12,9 +13,9 @@ const initialState = {
   inventoryInfo: "",
 };
 
-const SupplierForm = () => {
+const InventoryForm = () => {
   const [form, setForm] = useState(initialState);
-  const [submitted, setSubmitted] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,15 +24,15 @@ const SupplierForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    // TODO: Integrate with backend or state management
-    setTimeout(() => setSubmitted(false), 2000);
+    // Save form data to localStorage for dashboard access
+    localStorage.setItem('inventoryForm', JSON.stringify(form));
+    navigate('/dashboard');
   };
 
   return (
-    <div className="supplier-form-container">
-      <form className="supplier-form" onSubmit={handleSubmit} autoComplete="off">
-        <h2 className="form-title">Supplier Information</h2>
+    <div className="inventory-form-container">
+      <form className="inventory-form" onSubmit={handleSubmit} autoComplete="off">
+        <h2 className="form-title">Inventory Information</h2>
         <div className="form-group">
           <label htmlFor="itemName">Item Name</label>
           <input
@@ -119,7 +120,7 @@ const SupplierForm = () => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="inventoryInfo">Inventory Information</label>
+          <label htmlFor="inventoryInfo">Inventory Details</label>
           <textarea
             id="inventoryInfo"
             name="inventoryInfo"
@@ -130,12 +131,12 @@ const SupplierForm = () => {
             required
           />
         </div>
-        <button className="submit-btn" type="submit" disabled={submitted}>
-          {submitted ? "Submitted!" : "Submit"}
+        <button className="submit-btn" type="submit">
+          Submit
         </button>
       </form>
     </div>
   );
 };
 
-export default SupplierForm;
+export default InventoryForm;
