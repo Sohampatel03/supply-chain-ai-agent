@@ -5,6 +5,7 @@ import {
   getSuppliers,
   deleteSupplier,
   updateSupplier,
+  getSupplierById,
 } from "../controllers/supplierController.js";
 import {
   runSupplierAnalysis,     // ✅ fresh analysis
@@ -19,6 +20,7 @@ router.post("/", protect, addSupplier);
 router.get("/", protect, getSuppliers);
 router.put("/:id", protect, updateSupplier);
 router.delete("/:id", protect, deleteSupplier);
+router.get("/:id", protect, getSupplierById);
 
 // ---------------- Supplier + Auto Analysis ----------------
 // 👉 Add supplier + run analysis immediately

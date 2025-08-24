@@ -23,7 +23,7 @@ function App() {
       <Route path="/dashboard" element={<Dashboard />} />
 
       {/* Supplier form */}
-      <Route path="/form" element={<InventoryForm />} />
+      <Route path="/form" element={<SupplierForm />} />
 
     </Routes>
   );
