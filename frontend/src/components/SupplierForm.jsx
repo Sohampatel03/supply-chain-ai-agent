@@ -3,17 +3,17 @@ import { useNavigate } from "react-router-dom";
 import "./SupplierForm.css";
 
 const initialState = {
+  supplierName: "",
+  contactNumber: "",
   itemName: "",
   route: "",
-  vehicleNumber: "",
-  gpsLocation: "",
   deliveryDate: "",
   deliveryTime: "",
   dealPrice: "",
   inventoryInfo: "",
 };
 
-const InventoryForm = () => {
+const InventoryForm = ({ onSubmit }) => {
   const [form, setForm] = useState(initialState);
   const navigate = useNavigate();
 
@@ -24,15 +24,43 @@ const InventoryForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Save form data to localStorage for dashboard access
-    localStorage.setItem('inventoryForm', JSON.stringify(form));
-    navigate('/dashboard');
+    if (onSubmit) {
+      onSubmit(form);
+    } else {
+      localStorage.setItem('inventoryForm', JSON.stringify(form));
+      navigate('/dashboard');
+    }
   };
 
   return (
     <div className="inventory-form-container">
       <form className="inventory-form" onSubmit={handleSubmit} autoComplete="off">
         <h2 className="form-title">Inventory Information</h2>
+        <div className="form-group">
+          <label htmlFor="supplierName">Supplier Name</label>
+          <input
+            type="text"
+            id="supplierName"
+            name="supplierName"
+            placeholder="e.g. Abhay Singh"
+            value={form.supplierName}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="contactNumber">Contact Number</label>
+          <input
+            type="tel"
+            id="contactNumber"
+            name="contactNumber"
+            placeholder="e.g. 9876543210"
+            value={form.contactNumber}
+            onChange={handleChange}
+            required
+            pattern="[0-9]{10,}"
+          />
+        </div>
         <div className="form-group">
           <label htmlFor="itemName">Item Name</label>
           <input
@@ -53,30 +81,6 @@ const InventoryForm = () => {
             name="route"
             placeholder="e.g. Mumbai → Pune"
             value={form.route}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="vehicleNumber">Vehicle Number</label>
-          <input
-            type="text"
-            id="vehicleNumber"
-            name="vehicleNumber"
-            placeholder="e.g. MH12AB1234"
-            value={form.vehicleNumber}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="gpsLocation">GPS Location of Vehicle</label>
-          <input
-            type="text"
-            id="gpsLocation"
-            name="gpsLocation"
-            placeholder="e.g. 19.0760° N, 72.8777° E"
-            value={form.gpsLocation}
             onChange={handleChange}
             required
           />
