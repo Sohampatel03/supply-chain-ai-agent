@@ -3,15 +3,28 @@ import Supplier from "../models/Supplier.js";
 // ➕ Add Supplier
 export const addSupplier = async (req, res) => {
   try {
-    const { name, location, reliabilityScore, leadTime, cost } = req.body;
+
+    const {
+      companyName,
+      location,
+      leadTime,
+      transportMode,
+      cost,
+      route,
+      inventory,
+      reliability
+    } = req.body;
 
     const supplier = await Supplier.create({
-      user: req.user._id, // current logged-in user ka data link
-      name,
+      user: req.user._id,
+      companyName,
       location,
-      reliabilityScore,
       leadTime,
+      transportMode,
       cost,
+      route,
+      inventory,
+      reliability
     });
 
     res.status(201).json(supplier);
