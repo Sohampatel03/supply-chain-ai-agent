@@ -5,27 +5,26 @@ export const runRouteAgent = async (suppliers = []) => {
   const results = [];
 
   for (const s of suppliers) {
-    // make a maps API call - returns array of candidate routes
-    // mapsAPI.getRoutes should return an array of { path, durationHours, distanceKm, costEstimate }
     let routes = [];
     try {
-      routes = await getRoutes(s.location, s.destination);
+      // ✅ use origin + destination from supplier.route
+      routes = await getRoutes(s.route.origin, s.route.destination);
     } catch (err) {
-      // fallback: create a simple mock route if maps API not configured
+      // fallback if API not available
       routes = [
         {
-          path: [s.location, s.destination],
-          durationHours: (s.leadTime ?? 24) * 24,
+          path: [s.route.origin, s.route.destination],
+          durationHours: (s.leadTime ?? 1) * 24,
           distanceKm: 1000,
-          costEstimate: s.cost ?? 0,
-          notes: "mock-route"
-        }
+          costEstimate: s.cost?.amount ?? 0,
+          notes: "mock-route",
+        },
       ];
     }
 
     results.push({
       supplierId: s._id,
-      name: s.name,
+      name: s.companyName, // ✅ updated (was s.name earlier)
       routes,
     });
   }
