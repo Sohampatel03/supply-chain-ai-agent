@@ -30,6 +30,8 @@ const LoginForm = () => {
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify({ _id: res.data._id, name: res.data.name, email: res.data.email }));
       navigate("/dashboard");
+
+      navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Invalid email or password");
     }
@@ -43,7 +45,7 @@ const LoginForm = () => {
         {error && <div style={{ color: "red", textAlign: "center", marginTop: "0.5rem" }}>{error}</div>}
         <input className="auth-input" type="email" name="email" placeholder="Email" value={form.email} onChange={handleChange} required />
         <input className="auth-input" type="password" name="password" placeholder="Password" value={form.password} onChange={handleChange} required />
-      
+
         <button className="auth-btn primary" type="submit">Login</button>
         <button className="auth-btn secondary" type="button" onClick={() => navigate("/register")}>Sign Up</button>
       </form>
