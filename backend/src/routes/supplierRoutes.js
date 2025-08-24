@@ -1,16 +1,17 @@
 // routes/supplierRoutes.js
 import express from "express";
 import {
-  addSupplier,
-  getSuppliers,
-  deleteSupplier,
-  updateSupplier,
-  getSupplierById,
+    addSupplier,
+    getSuppliers,
+    deleteSupplier,
+    updateSupplier,
+    getSupplierById,
+    getSupplierAnalysis,
 } from "../controllers/supplierController.js";
 import {
-  runSupplierAnalysis,     // ✅ fresh analysis
-  getSupplierAnalysis,     // ✅ saved analysis
-} from "../controllers/analysisController.js"; 
+    runSupplierAnalysis,
+    
+} from "../controllers/analysisController.js";
 import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
