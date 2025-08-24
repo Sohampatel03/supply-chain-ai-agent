@@ -3,17 +3,19 @@ import { useNavigate } from "react-router-dom";
 import "./SupplierForm.css";
 
 const initialState = {
-  supplierName: "",
-  contactNumber: "",
-  itemName: "",
-  route: "",
-  deliveryDate: "",
-  deliveryTime: "",
-  dealPrice: "",
-  inventoryInfo: "",
+  companyName: "",
+  leadTime: "",
+  transportMode: "road",
+  costAmount: "",
+  costCurrency: "INR",
+  routeOrigin: "",
+  routeDestination: "",
+  routeEstimatedDays: "",
+  reliability: 80,
+  inventory: [{ product: "", quantity: "" }],
 };
 
-const InventoryForm = ({ onSubmit }) => {
+const SupplierForm = () => {
   const [form, setForm] = useState(initialState);
   const navigate = useNavigate();
 
@@ -22,120 +24,218 @@ const InventoryForm = ({ onSubmit }) => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleInventoryChange = (index, e) => {
+    const { name, value } = e.target;
+    const newInventory = [...form.inventory];
+    newInventory[index][name] = value;
+    setForm((prev) => ({ ...prev, inventory: newInventory }));
+  };
+
+  const addInventoryItem = () => {
+    setForm((prev) => ({ ...prev, inventory: [...prev.inventory, { product: "", quantity: "" }] }));
+  };
+
+  const removeInventoryItem = (index) => {
+    const newInventory = [...form.inventory];
+    newInventory.splice(index, 1);
+    setForm((prev) => ({ ...prev, inventory: newInventory }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (onSubmit) {
-      onSubmit(form);
-    } else {
-      localStorage.setItem('inventoryForm', JSON.stringify(form));
-      navigate('/dashboard');
+    // Prepare payload matching the backend schema
+    const payload = {
+      companyName: form.companyName,
+      leadTime: Number(form.leadTime),
+      transportMode: form.transportMode,
+      cost: {
+        amount: Number(form.costAmount),
+        currency: form.costCurrency,
+      },
+      route: {
+        origin: form.routeOrigin,
+        destination: form.routeDestination,
+        estimatedDays: form.routeEstimatedDays ? Number(form.routeEstimatedDays) : undefined,
+      },
+      reliability: Number(form.reliability),
+      inventory: form.inventory.map((item) => ({
+        product: item.product,
+        quantity: Number(item.quantity),
+      })),
+    };
+
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        alert("You need to be logged in to add a supplier.");
+        return navigate("/login");
+      }
+
+      const res = await fetch("http://localhost:5000/api/suppliers/with-analysis", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Failed to add supplier");
+      }
+
+      const data = await res.json();
+      console.log("Supplier added and analyzed:", data);
+      alert("Supplier added successfully!");
+      navigate("/dashboard");
+
+    } catch (error) {
+      console.error("Error adding supplier:", error);
+      alert(`Error: ${error.message}`);
     }
   };
 
   return (
-    <div className="inventory-form-container">
-      <form className="inventory-form" onSubmit={handleSubmit} autoComplete="off">
-        <h2 className="form-title">Inventory Information</h2>
+    <div className="supplier-form-container">
+      <form className="supplier-form" onSubmit={handleSubmit} autoComplete="off">
+        <h2 className="form-title">Supplier Information</h2>
+
         <div className="form-group">
-          <label htmlFor="supplierName">Supplier Name</label>
+          <label>Company Name</label>
           <input
             type="text"
-            id="supplierName"
-            name="supplierName"
-            placeholder="e.g. Abhay Singh"
-            value={form.supplierName}
+            name="companyName"
+            value={form.companyName}
             onChange={handleChange}
+            placeholder="e.g. Global Supply Co."
             required
           />
         </div>
+
         <div className="form-group">
-          <label htmlFor="contactNumber">Contact Number</label>
-          <input
-            type="tel"
-            id="contactNumber"
-            name="contactNumber"
-            placeholder="e.g. 9876543210"
-            value={form.contactNumber}
-            onChange={handleChange}
-            required
-            pattern="[0-9]{10,}"
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="itemName">Item Name</label>
-          <input
-            type="text"
-            id="itemName"
-            name="itemName"
-            placeholder="e.g. Steel Rods"
-            value={form.itemName}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="route">Route</label>
-          <input
-            type="text"
-            id="route"
-            name="route"
-            placeholder="e.g. Mumbai → Pune"
-            value={form.route}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="deliveryDate">Delivery Date</label>
-            <input
-              type="date"
-              id="deliveryDate"
-              name="deliveryDate"
-              value={form.deliveryDate}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="deliveryTime">Delivery Time</label>
-            <input
-              type="time"
-              id="deliveryTime"
-              name="deliveryTime"
-              value={form.deliveryTime}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        </div>
-        <div className="form-group">
-          <label htmlFor="dealPrice">Product Deal Price</label>
+          <label>Lead Time (days)</label>
           <input
             type="number"
-            id="dealPrice"
-            name="dealPrice"
-            placeholder="e.g. 50000"
-            value={form.dealPrice}
+            name="leadTime"
+            value={form.leadTime}
             onChange={handleChange}
             min="0"
-            step="0.01"
             required
           />
         </div>
+
         <div className="form-group">
-          <label htmlFor="inventoryInfo">Inventory Details</label>
-          <textarea
-            id="inventoryInfo"
-            name="inventoryInfo"
-            placeholder="e.g. 100 units, batch #A123"
-            value={form.inventoryInfo}
+          <label>Transport Mode</label>
+          <select name="transportMode" value={form.transportMode} onChange={handleChange}>
+            <option value="road">Road</option>
+            <option value="air">Air</option>
+            <option value="sea">Sea</option>
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label>Cost Amount</label>
+          <input
+            type="number"
+            name="costAmount"
+            value={form.costAmount}
             onChange={handleChange}
-            rows={3}
+            min="0"
             required
           />
         </div>
-        <button className="submit-btn" type="submit">
+
+        <div className="form-group">
+          <label>Cost Currency</label>
+          <input
+            type="text"
+            name="costCurrency"
+            value={form.costCurrency}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Route Origin</label>
+          <input
+            type="text"
+            name="routeOrigin"
+            value={form.routeOrigin}
+            onChange={handleChange}
+            placeholder="e.g. New York, USA"
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Route Destination</label>
+          <input
+            type="text"
+            name="routeDestination"
+            value={form.routeDestination}
+            onChange={handleChange}
+            placeholder="e.g. London, UK"
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Estimated Days</label>
+          <input
+            type="number"
+            name="routeEstimatedDays"
+            value={form.routeEstimatedDays}
+            onChange={handleChange}
+            min="0"
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Reliability Score (0-100)</label>
+          <input
+            type="number"
+            name="reliability"
+            value={form.reliability}
+            onChange={handleChange}
+            min="0"
+            max="100"
+          />
+        </div>
+
+        <h3>Inventory Items</h3>
+        {form.inventory.map((item, index) => (
+          <div key={index} className="inventory-item">
+            <input
+              type="text"
+              name="product"
+              placeholder="Product Name"
+              value={item.product}
+              onChange={(e) => handleInventoryChange(index, e)}
+              required
+            />
+            <input
+              type="number"
+              name="quantity"
+              placeholder="Quantity"
+              value={item.quantity}
+              onChange={(e) => handleInventoryChange(index, e)}
+              min="0"
+              required
+            />
+            {index > 0 && (
+              <button type="button" onClick={() => removeInventoryItem(index)}>
+                Remove
+              </button>
+            )}
+          </div>
+        ))}
+        <button type="button" onClick={addInventoryItem}>
+          Add Another Item
+        </button>
+
+        <button type="submit" className="submit-btn">
           Submit
         </button>
       </form>
@@ -143,4 +243,4 @@ const InventoryForm = ({ onSubmit }) => {
   );
 };
 
-export default InventoryForm;
+export default SupplierForm;
