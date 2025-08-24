@@ -126,27 +126,30 @@ const styles = `
   }
 }
 
-.sidebar {
-  position: sticky;
-  top: 100px;
-  height: fit-content;
-}
+sidebar {
+          position: sticky;
+          top: 200px;
+          height: fit-content;
+          width: 100%;
+          padding: 20px;
+          box-sizing: border-box;
+        }
 
-@media (max-width: 1024px) {
-  .sidebar {
-    position: static;
-    order: 2;
-  }
-}
+        @media (max-width: 1024px) {
+          .sidebar {
+            position: static;
+            order: 2;
+          }
+        }
 
-.sidebar-nav {
-  border-radius: 16px;
-  border: 1px solid #e2e8f0;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 1rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
-}
+        .sidebar-nav {
+          border-radius: 16px;
+          border: 1px solid #e2e8f0;
+          background: rgba(255, 255, 255, 0.9);
+          padding: 1rem;
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+          backdrop-filter: blur(10px);
+        }
 
 .main-content {
   display: flex;
@@ -522,7 +525,7 @@ const styles = `
 `;
 
 // Enhanced Main Component
-export default function SupplierDashboardDemo() {
+export default function NewDashboard() {
   const [activeTab, setActiveTab] = React.useState('home');
 
   return (
