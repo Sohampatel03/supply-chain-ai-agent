@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./AuthPanel.css";
+import "./LoginForm.css";
 
 const LoginForm = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -55,6 +55,7 @@ const LoginForm = () => {
   };
 
   return (
+
     <div className="auth-bg">
       <form className="auth-card" onSubmit={handleSubmit} autoComplete="off">
         <h1 className="auth-title">Login</h1>
