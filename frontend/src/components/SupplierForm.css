@@ -1,3 +1,4 @@
+/* Variables for consistent styling */
 :root {
   --misty-aqua: #a8edea;
   --deep-ocean: #274060;
@@ -9,9 +10,13 @@
   --button-hover: #35617a;
   --button-text: #fff;
   --title-color: #274060;
+  --add-btn-bg: #5ac8fa;
+  --remove-btn-bg: #ff6347;
+  --button-shadow: rgba(39, 64, 96, 0.2);
 }
 
-.inventory-form-container {
+/* Overall container for the form */
+.supplier-form-container {
   min-height: 100vh;
   width: 100vw;
   display: flex;
@@ -19,28 +24,32 @@
   justify-content: center;
   background: linear-gradient(135deg, var(--misty-aqua) 0%, var(--deep-ocean) 100%);
   padding: 2rem 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.inventory-form {
+/* Main form card style */
+.supplier-form {
   background: rgba(246, 252, 255, 0.92);
-  border-radius: 2rem;
-  box-shadow: 0 12px 48px rgba(39, 64, 96, 0.18), 0 1.5px 8px #a8edea33;
+  border-radius: 1.5rem;
+  box-shadow: 0 12px 48px rgba(39, 64, 96, 0.18), 0 1.5px 8px rgba(168, 237, 234, 0.2);
   padding: 2.7rem 2.2rem;
   max-width: 900px;
   width: 80vw;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2.2rem 2.5rem;
-  transition: box-shadow 0.3s, transform 0.18s;
+  gap: 1.5rem 2.5rem;
+  transition: box-shadow 0.3s ease-in-out, transform 0.18s ease-in-out;
   backdrop-filter: blur(10px);
-  border: 1.5px solid #eaf6fa99;
+  border: 1.5px solid rgba(234, 246, 250, 0.6);
   animation: fadeInCard 0.7s cubic-bezier(.4,2,.6,1) both;
 }
-.inventory-form:hover {
-  box-shadow: 0 18px 64px #27406033, 0 2px 12px #a8edea44;
-  transform: translateY(-4px) scale(1.015);
+
+.supplier-form:hover {
+  box-shadow: 0 18px 64px rgba(39, 64, 96, 0.2), 0 2px 12px rgba(168, 237, 234, 0.3);
+  transform: translateY(-4px);
 }
 
+/* Header and section titles */
 .form-title {
   color: var(--title-color);
   font-size: 2.1rem;
@@ -48,21 +57,25 @@
   margin-bottom: 0.5rem;
   text-align: center;
   letter-spacing: 0.02em;
-  text-shadow: 0 2px 8px #a8edea22;
+  text-shadow: 0 2px 8px rgba(168, 237, 234, 0.1);
   grid-column: 1 / -1;
 }
 
-.form-group, .form-row {
+h3 {
+  grid-column: 1 / -1;
+  color: var(--deep-ocean);
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 2px solid var(--misty-aqua);
+  padding-bottom: 0.3rem;
+  font-size: 1.2rem;
+}
+
+/* Form elements styling */
+.form-group {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-}
-.form-row {
-  flex-direction: row;
-  gap: 1rem;
-}
-.form-row .form-group {
-  flex: 1;
 }
 
 label {
@@ -72,7 +85,7 @@ label {
 }
 
 input,
-textarea {
+select {
   background: var(--input-bg);
   border: 1.5px solid var(--input-border);
   border-radius: 0.7rem;
@@ -81,13 +94,58 @@ textarea {
   color: var(--deep-ocean);
   transition: border 0.2s, box-shadow 0.2s;
   outline: none;
-  resize: none;
-  box-shadow: 0 1.5px 8px #a8edea11;
+  box-shadow: 0 1.5px 8px rgba(168, 237, 234, 0.1);
 }
+
 input:focus,
-textarea:focus {
+select:focus {
   border-color: var(--input-focus);
-  box-shadow: 0 0 0 2px var(--misty-aqua), 0 1.5px 8px #a8edea22;
+  box-shadow: 0 0 0 2px var(--misty-aqua), 0 1.5px 8px rgba(168, 237, 234, 0.2);
+}
+
+/* Inventory section specific styling */
+.inventory-item {
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  padding: 0.5rem;
+  background-color: rgba(234, 246, 250, 0.5);
+  border-radius: 0.7rem;
+}
+
+/* Buttons styling */
+.add-item-btn,
+.remove-item-btn {
+  border: none;
+  border-radius: 0.7rem;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.add-item-btn {
+  background-color: var(--add-btn-bg);
+  color: var(--button-text);
+  grid-column: 1 / -1;
+  margin-top: 1rem;
+}
+
+.add-item-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(90, 200, 250, 0.4);
+}
+
+.inventory-item .remove-item-btn {
+  background-color: var(--remove-btn-bg);
+  color: var(--button-text);
+}
+
+.inventory-item .remove-item-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(255, 99, 71, 0.4);
 }
 
 .submit-btn {
@@ -99,38 +157,31 @@ textarea:focus {
   font-size: 1.15rem;
   font-weight: 700;
   cursor: pointer;
-  margin-top: 0.5rem;
-  transition: background 0.2s, transform 0.2s, box-shadow 0.18s;
-  box-shadow: 0 2px 12px #3ec98f22;
+  margin-top: 1.5rem;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 12px rgba(62, 201, 143, 0.2);
   letter-spacing: 0.01em;
   grid-column: 1 / -1;
 }
+
 .submit-btn:hover:not(:disabled) {
   background: linear-gradient(90deg, #35617a 60%, #3ec98f 100%);
-  transform: translateY(-2px) scale(1.03);
-  box-shadow: 0 8px 32px #3ec98f33;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 32px rgba(62, 201, 143, 0.3);
 }
+
 .submit-btn:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
 
+/* Media queries for responsiveness */
 @media (max-width: 900px) {
-  .inventory-form {
+  .supplier-form {
     grid-template-columns: 1fr;
-    max-width: 98vw;
-    width: 98vw;
-    padding: 1.2rem 0.5rem;
-  }
-}
-@media (max-width: 600px) {
-  .inventory-form {
-    padding: 1.2rem 0.5rem;
-    max-width: 98vw;
-    width: 98vw;
-  }
-  .form-title {
-    font-size: 1.3rem;
+    max-width: 95vw;
+    width: 95vw;
+    padding: 1.5rem;
   }
 }
 
