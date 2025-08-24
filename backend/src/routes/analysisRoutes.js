@@ -12,7 +12,7 @@ import { protect } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 // POST /api/analysis/run  -- triggers agents and stores results
-router.post("/run", protect, runAnalysis);
+router.get("/run", protect, runAnalysis);
 
 // POST /api/analysis/supplier/:id  -- run analysis for specific supplier
 router.post("/supplier/:id", protect, runSupplierAnalysis);
