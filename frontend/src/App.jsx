@@ -3,7 +3,7 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 // Relative paths were incorrect. Correcting them.
 import SupplierForm from "./components/SupplierForm";
-import Dashboard from "./components/Dashboard";
+import Dashboard from "./components/Dashboard/Dashboard";
 import SignUpForm from "./components/SignUpForm";
 import LoginForm from "./components/LoginForm"; // ✅ Add the backend-integrated Login
 import './components/AuthPanel.css';
