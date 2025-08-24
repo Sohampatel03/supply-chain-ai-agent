@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./AuthPanel.css";
+import "./LoginForm.css";
 
 const LoginForm = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -38,15 +38,15 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="auth-bg">
-      <form className="auth-card" onSubmit={handleSubmit} autoComplete="off">
-        <h1 className="auth-title">Login</h1>
-        {error && <div style={{ color: "red", textAlign: "center", marginTop: "0.5rem" }}>{error}</div>}
-        <input className="auth-input" type="email" name="email" placeholder="Email" value={form.email} onChange={handleChange} required />
-        <input className="auth-input" type="password" name="password" placeholder="Password" value={form.password} onChange={handleChange} required />
+    <div className="login-form-container">
+      <form className="login-form" onSubmit={handleSubmit} autoComplete="off">
+        <h1 className="login-title">Login</h1>
+        {error && <div className="login-error">{error}</div>}
+        <input className="login-input" type="email" name="email" placeholder="Email" value={form.email} onChange={handleChange} required />
+        <input className="login-input" type="password" name="password" placeholder="Password" value={form.password} onChange={handleChange} required />
 
-        <button className="auth-btn primary" type="submit">Login</button>
-        <button className="auth-btn secondary" type="button" onClick={() => navigate("/register")}>Sign Up</button>
+        <button className="login-btn primary" type="submit">Login</button>
+        <button className="login-btn secondary" type="button" onClick={() => navigate("/register")}>Sign Up</button>
       </form>
     </div>
   );
