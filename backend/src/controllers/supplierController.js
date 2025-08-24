@@ -88,7 +88,7 @@ export const getSupplierAnalysis = async (req, res) => {
   }
 };
 
-// 🗑 Delete Supplier
+// 🗑️ Delete Supplier
 export const deleteSupplier = async (req, res) => {
   try {
     const supplier = await Supplier.findById(req.params.id);
@@ -109,7 +109,7 @@ export const deleteSupplier = async (req, res) => {
   }
 };
 
-// ✏ Update Supplier
+// ✏️ Update Supplier
 export const updateSupplier = async (req, res) => {
   try {
     const supplier = await Supplier.findById(req.params.id);
