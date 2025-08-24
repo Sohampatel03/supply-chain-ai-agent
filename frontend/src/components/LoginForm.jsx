@@ -29,8 +29,6 @@ const LoginForm = () => {
         password: form.password
       });
 
-      const user = { _id: res.data._id, name: res.data.name, email: res.data.email };
-
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify({ _id: res.data._id, name: res.data.name, email: res.data.email }));
       navigate("/dashboard");
