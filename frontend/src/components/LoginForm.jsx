@@ -32,20 +32,8 @@ const LoginForm = () => {
       const user = { _id: res.data._id, name: res.data.name, email: res.data.email };
 
       localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(user));
-
-      // 2️⃣ Check if supplier exists
-      const supplierCheck = await axios.get(`http://localhost:5000/api/supplier/check/${user._id}`);
-    console.log(supplierCheck.data);
-      if (supplierCheck.data.exists) {
-        // Supplier exists → store supplier data and navigate to dashboard
-        localStorage.setItem("supplier", JSON.stringify(supplierCheck.data.supplier));
-        navigate("/dashboard");
-      } else {
-        // Supplier does not exist → navigate to supplier form
-        navigate("/form");
-      }
-
+      localStorage.setItem("user", JSON.stringify({ _id: res.data._id, name: res.data.name, email: res.data.email }));
+      navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Invalid email or password");
     }
@@ -58,7 +46,7 @@ const LoginForm = () => {
         {error && <div style={{ color: "red", textAlign: "center", marginTop: "0.5rem" }}>{error}</div>}
         <input className="auth-input" type="email" name="email" placeholder="Email" value={form.email} onChange={handleChange} required />
         <input className="auth-input" type="password" name="password" placeholder="Password" value={form.password} onChange={handleChange} required />
-      
+
         <button className="auth-btn primary" type="submit">Login</button>
         <button className="auth-btn secondary" type="button" onClick={() => navigate("/register")}>Sign Up</button>
       </form>
