@@ -6,7 +6,7 @@ import { protect } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 // POST /api/analysis/run  -- triggers agents and stores results
-router.post("/run", protect, runAnalysis);
+router.get("/run", protect, runAnalysis);
 
 // optional: GET /api/analysis/latest  -> return last N analysis for user (you can add later)
 
