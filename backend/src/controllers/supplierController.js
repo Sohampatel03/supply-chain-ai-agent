@@ -5,6 +5,56 @@ import { calculateDelayRisk } from "../agents/delayAgent.js";
 import { runCostAgent } from "../agents/costAgent.js";
 import { runRouteAgent } from "../agents/routeAgent.js";
 
+
+export const getSupplierById = async (req, res) => {
+  try {
+    const supplierId = req.params.id;
+    const userId = req.user._id; // From auth middleware
+
+    const supplier = await Supplier.findOne({
+      _id: supplierId,
+      user: userId // Ensure supplier belongs to authenticated user
+    });
+
+    if (!supplier) {
+      return res.status(404).json({
+        message: "Supplier not found or doesn't belong to user"
+      });
+    }
+
+    // Get latest analysis
+    const analysis = await Analysis.findOne({ 
+      user: userId, 
+      supplier: supplierId 
+    }).sort({ updatedAt: -1 });
+
+    return res.json({
+      supplier: {
+        _id: supplier._id,
+        companyName: supplier.companyName,
+        leadTime: supplier.leadTime,
+        transportMode: supplier.transportMode,
+        reliability: supplier.reliability,
+        route: supplier.route,
+        inventory: supplier.inventory,
+        contactInfo: supplier.contactInfo,
+        riskScore: analysis?.riskScore || null,
+        delayRisk: analysis?.delayRisk || null,
+        estimatedCost: analysis?.estimatedCost || null,
+        alternateRoutes: analysis?.alternateRoutes || null,
+        lastAnalyzed: analysis?.updatedAt || null
+      },
+      analysis: analysis
+    });
+
+  } catch (error) {
+    console.error("Get supplier by ID error:", error);
+    return res.status(500).json({
+      message: "Server error while fetching supplier",
+      error: error.message
+    });
+  }
+};
 // ➕ Add Supplier + Auto Analysis (Default Flow)
 export const addSupplier = async (req, res) => {
   try {

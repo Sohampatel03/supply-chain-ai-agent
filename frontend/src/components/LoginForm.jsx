@@ -23,14 +23,16 @@ const LoginForm = () => {
     }
 
     try {
+      // 1️⃣ Login request
       const res = await axios.post("http://localhost:5000/api/auth/login", {
-        email: form.email, password: form.password
+        email: form.email,
+        password: form.password
       });
+
+      const user = { _id: res.data._id, name: res.data.name, email: res.data.email };
 
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify({ _id: res.data._id, name: res.data.name, email: res.data.email }));
-      navigate("/dashboard");
-
       navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Invalid email or password");
@@ -40,7 +42,6 @@ const LoginForm = () => {
   return (
     <div className="auth-bg">
       <form className="auth-card" onSubmit={handleSubmit} autoComplete="off">
-
         <h1 className="auth-title">Login</h1>
         {error && <div style={{ color: "red", textAlign: "center", marginTop: "0.5rem" }}>{error}</div>}
         <input className="auth-input" type="email" name="email" placeholder="Email" value={form.email} onChange={handleChange} required />
