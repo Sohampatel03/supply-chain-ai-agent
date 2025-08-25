@@ -24,7 +24,6 @@ const Sidebar = ({ activeTab, setActiveTab, data }) => {
   return (
     <aside className="sidebar">
       <nav className="sidebar-nav">
-        {/* Dashboard */}
         <NavItem
           icon={<Home size={18} />}
           label="Dashboard"
@@ -61,9 +60,16 @@ const Sidebar = ({ activeTab, setActiveTab, data }) => {
           label="Logistics"
           active={activeTab === "logistics"}
           onClick={() => navigate("/map")}
+          onClick={() => navigate("/map")}
+        />
+        
+        <NavItem
+          icon={<PlusCircle size={18} />}
+          label="Add Supplier"
+          active={activeTab === "add-supplier"}
+          onClick={() => navigate("/form")}
         />
 
-        {/* Settings */}
         <NavItem
           icon={<Settings size={18} />}
           label="Settings"
@@ -82,5 +88,4 @@ const Sidebar = ({ activeTab, setActiveTab, data }) => {
     </aside>
   );
 };
-
 export default Sidebar;

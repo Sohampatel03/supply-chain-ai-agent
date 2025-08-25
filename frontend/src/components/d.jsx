@@ -547,6 +547,23 @@ export default function NewDashboard() {
 
         if (suppliersData.length > 0) {
           setSelectedSupplier(suppliersData[0]); // default: first supplier
+        // 1️⃣ Fetch suppliers
+        const suppliersRes = await fetch(
+          "http://localhost:5000/api/suppliers",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`, // ensure token is stored at login
+            },
+          }
+        );
+        const suppliers = await suppliersRes.json();
+        setSuppliers(suppliers);
+        console.log("✅ Suppliers fetched:", suppliers);
+
+        if (!suppliers.length) {
+          console.warn("⚠️ No suppliers found");
+          setLoading(false);
+          return;
         }
         setLoading(false);
       } catch (err) {
@@ -566,6 +583,10 @@ export default function NewDashboard() {
         setLoading(true);
         const analysisRes = await fetch(
           `http://localhost:5000/api/suppliers/${selectedSupplier._id}/analysis`,
+        // 3️⃣ Fetch analysis data
+        const analysisRes = await fetch(
+          `http://localhost:5000/api/suppliers/${supplierId}/analysis`,
+
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -573,8 +594,11 @@ export default function NewDashboard() {
           }
         );
         const analysis = await analysisRes.json();
-        console.log("✅ Analysis fetched for:", selectedSupplier.companyName, analysis);
-        setAnalysisData(analysis);
+
+        console.log("✅ Analysis fetched:", analysis);
+
+        setAnalysisData(analysis); // ✅ Save for components
+
         setLoading(false);
       } catch (err) {
         console.error("❌ Error fetching analysis:", err);
@@ -584,6 +608,7 @@ export default function NewDashboard() {
 
     fetchAnalysis();
   }, [selectedSupplier]);
+
 
   return (
     <>
@@ -597,6 +622,7 @@ export default function NewDashboard() {
             activeTab={activeTab}
             setActiveTab={setActiveTab}
             data={suppliers}
+
             selectedSupplier={selectedSupplier}
             setSelectedSupplier={setSelectedSupplier}
           />
