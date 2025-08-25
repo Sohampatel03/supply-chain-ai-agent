@@ -6,12 +6,13 @@ import RouteCards from "./RouteCards";
 import Charts from "./Charts";
 import ColorAnalysis from "./ColorAnalysis";
 import ColorPalette from "./ColorPalette";
+import Loader from "./loader";
 
 // Enhanced CSS Styles with better theme consistency
 const styles = `
 .dashboard-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, rgba(246,252,255,0.97) 80%, #eaf6fa 100%);
+  background: radial-gradient(ellipse at top left, #b6f0ea 0%, #7db0c5 100%);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
@@ -527,12 +528,13 @@ sidebar {
 export default function NewDashboard() {
   const [activeTab, setActiveTab] = useState("home");
   const [analysisData, setAnalysisData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [suppliers, setSuppliers] = useState([]);
 
   useEffect(() => {
     const fetchAnalysis = async () => {
       try {
+        setLoading(true);
         // 1️⃣ Fetch suppliers
         const suppliersRes = await fetch("http://localhost:5000/api/suppliers", {
           headers: {
@@ -572,10 +574,12 @@ export default function NewDashboard() {
     fetchAnalysis();
   }, []);
 
-  if (loading) return <div className="p-4">Loading dashboard...</div>;
+  // if (loading) return <div className="p-4">Loading dashboard...</div>;
 
   return (
     <>
+       {loading && <Loader />}
+
       <style>{styles}</style>
       <div className="dashboard-container">
         <Topbar />

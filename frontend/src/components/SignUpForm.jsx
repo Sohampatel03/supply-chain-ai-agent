@@ -226,23 +226,42 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./AuthPanel.css";
+import { Loader } from "lucide-react";
 
 const SignUpForm = () => {
-  const [form, setForm] = useState({ name: "", email: "", password: "", confirmPassword: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const validateForm = () => {
-    if (!/^[A-Za-z\s]{2,50}$/.test(form.name)) { setError("Name must be 2-50 letters only"); return false; }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) { setError("Invalid email format"); return false; }
-    if (form.password.length < 6) { setError("Password must be at least 6 characters"); return false; }
-    if (form.password !== form.confirmPassword) { setError("Passwords do not match"); return false; }
-    setError(""); 
+    if (!/^[A-Za-z\s]{2,50}$/.test(form.name)) {
+      setError("Name must be 2-50 letters only");
+      return false;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      setError("Invalid email format");
+      return false;
+    }
+    if (form.password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return false;
+    }
+    if (form.password !== form.confirmPassword) {
+      setError("Passwords do not match");
+      return false;
+    }
+    setError("");
     return true;
   };
 
@@ -251,12 +270,24 @@ const SignUpForm = () => {
     if (!validateForm()) return;
 
     try {
+      setLoading(true);
+
       const res = await axios.post("http://localhost:5000/api/auth/register", {
-        name: form.name, email: form.email, password: form.password
+        name: form.name,
+        email: form.email,
+        password: form.password,
       });
 
       localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify({ _id: res.data._id, name: res.data.name, email: res.data.email }));
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          _id: res.data._id,
+          name: res.data.name,
+          email: res.data.email,
+        })
+      );
+      setLoading(false);
       navigate("/login");
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
@@ -264,18 +295,68 @@ const SignUpForm = () => {
   };
 
   return (
-    <div className="auth-bg">
-      <form className="auth-card" onSubmit={handleSubmit} autoComplete="off">
-        <h1 className="auth-title">Sign Up</h1>
-        <input className="auth-input" type="text" name="name" placeholder="Full Name" value={form.name} onChange={handleChange} required />
-        <input className="auth-input" type="email" name="email" placeholder="Email" value={form.email} onChange={handleChange} required />
-        <input className="auth-input" type="password" name="password" placeholder="Password" value={form.password} onChange={handleChange} required />
-        <input className="auth-input" type="password" name="confirmPassword" placeholder="Confirm Password" value={form.confirmPassword} onChange={handleChange} required />
-        {error && <div style={{ color: "red", textAlign: "center", marginTop: "0.5rem" }}>{error}</div>}
-        <button className="auth-btn primary" type="submit">Sign Up</button>
-        <button className="auth-btn secondary" type="button" onClick={() => navigate("/login")}>Already have an account?</button>
-      </form>
-    </div>
+    <>
+      {loading && <Loader />}
+
+      <div className="auth-bg">
+        <form className="auth-card" onSubmit={handleSubmit} autoComplete="off">
+          <h1 className="auth-title">Sign Up</h1>
+          <input
+            className="auth-input"
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            value={form.name}
+            onChange={handleChange}
+            required
+          />
+          <input
+            className="auth-input"
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={form.email}
+            onChange={handleChange}
+            required
+          />
+          <input
+            className="auth-input"
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={handleChange}
+            required
+          />
+          <input
+            className="auth-input"
+            type="password"
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            value={form.confirmPassword}
+            onChange={handleChange}
+            required
+          />
+          {error && (
+            <div
+              style={{ color: "red", textAlign: "center", marginTop: "0.5rem" }}
+            >
+              {error}
+            </div>
+          )}
+          <button className="auth-btn primary" type="submit">
+            Sign Up
+          </button>
+          <button
+            className="auth-btn secondary"
+            type="button"
+            onClick={() => navigate("/login")}
+          >
+            Already have an account?
+          </button>
+        </form>
+      </div>
+    </>
   );
 };
 
