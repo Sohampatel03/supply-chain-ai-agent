@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Home, BarChart3, Route, Truck, Settings } from "lucide-react";
 
 const NavItem = ({ icon, label, active, onClick, children }) => {
@@ -16,9 +16,13 @@ const NavItem = ({ icon, label, active, onClick, children }) => {
   );
 };
 
-const Sidebar = ({ activeTab, setActiveTab, data }) => {
-  const [selectedCompany, setSelectedCompany] = useState(data[0]?.companyName);
-
+const Sidebar = ({
+  activeTab,
+  setActiveTab,
+  data,
+  selectedSupplier,
+  setSelectedSupplier,
+}) => {
   return (
     <aside className="sidebar">
       <nav className="sidebar-nav">
@@ -30,27 +34,32 @@ const Sidebar = ({ activeTab, setActiveTab, data }) => {
           onClick={() => setActiveTab("home")}
         />
 
-        {/* Analysis with Dropdown if multiple companies */}
-        <NavItem
-          icon={<BarChart3 size={18} />}
-          label={selectedCompany || "Analysis"}
-          active={activeTab === "analysis"}
-          onClick={() => setActiveTab("analysis")}
-        >
-          {data.length > 1 && (
+        {/* Supplier Analysis Dropdown (MODIFIED) */}
+        <div className="nav-item-wrapper">
+          <div className="nav-item supplier-dropdown-wrapper">
+            <span>
+              <BarChart3 size={18} />
+            </span>
             <select
               className="company-dropdown"
-              value={selectedCompany}
-              onChange={(e) => setSelectedCompany(e.target.value)}
+              value={selectedSupplier?.companyName || ""}
+              onChange={(e) => {
+                const companyName = e.target.value;
+                setSelectedSupplier(data.find((c) => c.companyName === companyName));
+                setActiveTab("analysis");
+              }}
             >
+              <option value="" disabled>
+                TransGlobal Logistics
+              </option>
               {data.map((company, idx) => (
                 <option key={idx} value={company.companyName}>
                   {company.companyName}
                 </option>
               ))}
             </select>
-          )}
-        </NavItem>
+          </div>
+        </div>
 
         {/* Route Management */}
         <NavItem

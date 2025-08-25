@@ -143,3 +143,70 @@
     transform: translateX(0);
   }
 }
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.nav-item-wrapper {
+  padding: 0 2rem;
+  width: 100%;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Adjust spacing between icon and text/dropdown */
+  font-size: 1.15rem;
+  cursor: pointer;
+  border-radius: 0.7rem 0 0 0.7rem;
+  margin-bottom: 0.5rem;
+  transition: background 0.25s, color 0.25s, transform 0.18s;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 2px 12px rgba(39, 64, 96, 0.04);
+  will-change: transform;
+  padding: 1rem 0; /* Add padding here for consistent spacing */
+}
+
+.nav-item:hover {
+  background: linear-gradient(90deg, #a8edea 60%, #fff 100%);
+  color: var(--deep-ocean);
+  transform: translateX(8px) scale(1.04);
+  box-shadow: 0 4px 24px #a8edea44;
+}
+
+/* Styles for the dropdown */
+.nav-item .company-dropdown {
+  /* This ensures the select element fills the available space */
+  flex-grow: 1; 
+  
+  /* Resetting default select styles */
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: inherit; /* Inherit font size from parent nav-item */
+  color: inherit; /* Inherit color from parent nav-item */
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding-right: 25px; /* Space for a custom arrow */
+  
+  /* Custom Arrow for dropdown */
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+}
+
+.nav-item-active {
+  background: linear-gradient(90deg, #a8edea 60%, #fff 100%);
+  color: var(--deep-ocean);
+}
+
+.nav-item-active .company-dropdown {
+  color: var(--deep-ocean); /* Keep dropdown text color consistent with active state */
+}

@@ -530,69 +530,81 @@ export default function NewDashboard() {
   const [analysisData, setAnalysisData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [suppliers, setSuppliers] = useState([]);
+  const [selectedSupplier, setSelectedSupplier] = useState(null);
 
+  // 1️⃣ Fetch suppliers on mount
   useEffect(() => {
-    const fetchAnalysis = async () => {
+    const fetchSuppliers = async () => {
       try {
         setLoading(true);
-        // 1️⃣ Fetch suppliers
         const suppliersRes = await fetch("http://localhost:5000/api/suppliers", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // ensure token is stored at login
-          },
-        });
-        const suppliers = await suppliersRes.json();
-        setSuppliers(suppliers);
-        console.log("✅ Suppliers fetched:", suppliers);
-
-        if (!suppliers.length) {
-          console.warn("⚠️ No suppliers found");
-          setLoading(false);
-          return;
-        }
-
-        // 2️⃣ Pick first supplier ID (or you can add dropdown later for selection)
-        const supplierId = suppliers[0]._id;
-
-        // 3️⃣ Fetch analysis data
-        const analysisRes = await fetch(`http://localhost:5000/api/suppliers/${supplierId}/analysis`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-        const analysis = await analysisRes.json();
-         console.log("✅ Analysis fetched:", analysis);
+        const suppliersData = await suppliersRes.json();
+        setSuppliers(suppliersData);
 
-        setAnalysisData(analysis); // ✅ Save for components
+        if (suppliersData.length > 0) {
+          setSelectedSupplier(suppliersData[0]); // default: first supplier
+        }
         setLoading(false);
       } catch (err) {
-        console.error("❌ Error fetching data:", err);
+        console.error("❌ Error fetching suppliers:", err);
+        setLoading(false);
+      }
+    };
+
+    fetchSuppliers();
+  }, []);
+
+  // 2️⃣ Fetch analysis whenever selectedSupplier changes
+  useEffect(() => {
+    const fetchAnalysis = async () => {
+      if (!selectedSupplier?._id) return;
+      try {
+        setLoading(true);
+        const analysisRes = await fetch(
+          `http://localhost:5000/api/suppliers/${selectedSupplier._id}/analysis`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        const analysis = await analysisRes.json();
+        console.log("✅ Analysis fetched for:", selectedSupplier.companyName, analysis);
+        setAnalysisData(analysis);
+        setLoading(false);
+      } catch (err) {
+        console.error("❌ Error fetching analysis:", err);
         setLoading(false);
       }
     };
 
     fetchAnalysis();
-  }, []);
-
-  // if (loading) return <div className="p-4">Loading dashboard...</div>;
+  }, [selectedSupplier]);
 
   return (
     <>
-       {loading && <Loader />}
+      {loading && <Loader />}
 
       <style>{styles}</style>
       <div className="dashboard-container">
         <Topbar />
         <div className="main-layout">
-          <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} data={suppliers} />
+          <Sidebar
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            data={suppliers}
+            selectedSupplier={selectedSupplier}
+            setSelectedSupplier={setSelectedSupplier}
+          />
 
           <main className="main-content">
-            {/* ✅ Pass fetched analysisData to components */}
             <HeaderCards data={analysisData} />
             <RouteCards data={analysisData} />
             <Charts data={analysisData} />
-            {/* <ColorAnalysis data={analysisData} /> */}
-            {/* <ColorPalette data={analysisData} /> */}
           </main>
         </div>
       </div>
