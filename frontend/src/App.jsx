@@ -4,16 +4,18 @@ import SupplierForm from "./components/SupplierForm";
 // import Dashboard from "./components/Dashboard/Dashboard";
 import SignUpForm from "./components/SignUpForm";
 import LoginForm from "./components/LoginForm";
-import RecentAlerts from "./components/Dashboard/RecentAlerts"; 
-import './components/AuthPanel.css';
-import './App.css';
-import 'leaflet/dist/leaflet.css';
+import RecentAlerts from "./components/Dashboard/RecentAlerts";
+import "./components/AuthPanel.css";
+import "./App.css";
+import "leaflet/dist/leaflet.css";
 import "./components/DynamicMap.css";
 import NewDashboard from "./components/d"; // 👈 this looks suspicious
 
 function App() {
   return (
     <Routes>
+      <Route path="/" element={<Navigate to="/login" />} />
+
       <Route path="/login" element={<LoginForm />} />
       <Route path="/register" element={<SignUpForm />} />
 
