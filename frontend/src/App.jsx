@@ -10,6 +10,7 @@ import "./App.css";
 import "leaflet/dist/leaflet.css";
 import "./components/DynamicMap.css";
 import NewDashboard from "./components/d"; // 👈 this looks suspicious
+import DynamicMap from "./components/MapEmbed";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
 
       <Route path="/form" element={<SupplierForm />} />
       <Route path="/dash" element={<NewDashboard />} />
+      <Route path="/map" element={<DynamicMap />} />
 
       <Route path="/alerts" element={<RecentAlerts />} />
     </Routes>

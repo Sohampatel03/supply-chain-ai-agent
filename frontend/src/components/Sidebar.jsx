@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { Home, BarChart3, Route, Truck, Settings } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Home, BarChart3, Route, Truck, Settings, PlusCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const NavItem = ({ icon, label, active, onClick, children }) => {
   return (
@@ -18,11 +19,10 @@ const NavItem = ({ icon, label, active, onClick, children }) => {
 
 const Sidebar = ({ activeTab, setActiveTab, data }) => {
   const [selectedCompany, setSelectedCompany] = useState(data[0]?.companyName);
-
+  const navigate = useNavigate();
   return (
     <aside className="sidebar">
       <nav className="sidebar-nav">
-        {/* Dashboard */}
         <NavItem
           icon={<Home size={18} />}
           label="Dashboard"
@@ -30,7 +30,6 @@ const Sidebar = ({ activeTab, setActiveTab, data }) => {
           onClick={() => setActiveTab("home")}
         />
 
-        {/* Analysis with Dropdown if multiple companies */}
         <NavItem
           icon={<BarChart3 size={18} />}
           label={selectedCompany || "Analysis"}
@@ -52,7 +51,7 @@ const Sidebar = ({ activeTab, setActiveTab, data }) => {
           )}
         </NavItem>
 
-        {/* Route Management */}
+       
         <NavItem
           icon={<Route size={18} />}
           label="Route Management"
@@ -60,15 +59,21 @@ const Sidebar = ({ activeTab, setActiveTab, data }) => {
           onClick={() => setActiveTab("routes")}
         />
 
-        {/* Logistics */}
+      
         <NavItem
           icon={<Truck size={18} />}
           label="Logistics"
           active={activeTab === "logistics"}
-          onClick={() => setActiveTab("logistics")}
+          onClick={() => navigate("/map")}
+        />
+        
+        <NavItem
+          icon={<PlusCircle size={18} />}
+          label="Add Supplier"
+          active={activeTab === "add-supplier"}
+          onClick={() => navigate("/form")}
         />
 
-        {/* Settings */}
         <NavItem
           icon={<Settings size={18} />}
           label="Settings"
@@ -79,5 +84,4 @@ const Sidebar = ({ activeTab, setActiveTab, data }) => {
     </aside>
   );
 };
-
 export default Sidebar;
