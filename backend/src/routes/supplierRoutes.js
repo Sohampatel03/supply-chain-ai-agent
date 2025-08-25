@@ -14,7 +14,7 @@ import {
 } from "../controllers/analysisController.js";
 import { protect } from "../middleware/authMiddleware.js";
 
-const router = express.Router();
+const   router = express.Router();
 
 // -------------------- Supplier CRUD --------------------
 router.post("/", protect, addSupplier);
