@@ -12,7 +12,7 @@ import Loader from "./loader";
 const styles = `
 .dashboard-container {
   min-height: 100vh;
-  background: radial-gradient(ellipse at top left, #b6f0ea 0%, #7db0c5 100%);
+  background: linear-gradient(135deg, rgba(246,252,255,0.97) 80%, #eaf6fa 100%);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
@@ -536,11 +536,14 @@ export default function NewDashboard() {
       try {
         setLoading(true);
         // 1️⃣ Fetch suppliers
-        const suppliersRes = await fetch("http://localhost:5000/api/suppliers", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // ensure token is stored at login
-          },
-        });
+        const suppliersRes = await fetch(
+          "http://localhost:5000/api/suppliers",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`, // ensure token is stored at login
+            },
+          }
+        );
         const suppliers = await suppliersRes.json();
         setSuppliers(suppliers);
         console.log("✅ Suppliers fetched:", suppliers);
@@ -555,13 +558,16 @@ export default function NewDashboard() {
         const supplierId = suppliers[0]._id;
 
         // 3️⃣ Fetch analysis data
-        const analysisRes = await fetch(`http://localhost:5000/api/suppliers/${supplierId}/analysis`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        const analysisRes = await fetch(
+          `http://localhost:5000/api/suppliers/${supplierId}/analysis`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
         const analysis = await analysisRes.json();
-         console.log("✅ Analysis fetched:", analysis);
+        console.log("✅ Analysis fetched:", analysis);
 
         setAnalysisData(analysis); // ✅ Save for components
         setLoading(false);
@@ -574,17 +580,19 @@ export default function NewDashboard() {
     fetchAnalysis();
   }, []);
 
-  // if (loading) return <div className="p-4">Loading dashboard...</div>;
-
   return (
     <>
-       {loading && <Loader />}
+      {loading && <Loader />}
 
       <style>{styles}</style>
       <div className="dashboard-container">
         <Topbar />
         <div className="main-layout">
-          <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} data={suppliers} />
+          <Sidebar
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            data={suppliers}
+          />
 
           <main className="main-content">
             {/* ✅ Pass fetched analysisData to components */}
