@@ -1,5 +1,6 @@
-import React from "react";
-import { Home, BarChart3, Route, Truck, Settings } from "lucide-react";
+import React, { useState } from "react";
+import { Home, BarChart3, Route, Truck, Settings, Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const NavItem = ({ icon, label, active, onClick, children }) => {
   return (
@@ -16,13 +17,10 @@ const NavItem = ({ icon, label, active, onClick, children }) => {
   );
 };
 
-const Sidebar = ({
-  activeTab,
-  setActiveTab,
-  data,
-  selectedSupplier,
-  setSelectedSupplier,
-}) => {
+const Sidebar = ({ activeTab, setActiveTab, data }) => {
+  const [selectedCompany, setSelectedCompany] = useState(data[0]?.companyName);
+  const navigate = useNavigate();
+
   return (
     <aside className="sidebar">
       <nav className="sidebar-nav">
@@ -34,47 +32,35 @@ const Sidebar = ({
           onClick={() => setActiveTab("home")}
         />
 
-        {/* Supplier Analysis Dropdown (MODIFIED) */}
-        <div className="nav-item-wrapper">
-          <div className="nav-item supplier-dropdown-wrapper">
-            <span>
-              <BarChart3 size={18} />
-            </span>
+        {/* Analysis with Supplier Dropdown */}
+        <NavItem
+          icon={<BarChart3 size={18} />}
+          label="Analysis"
+          active={activeTab === "analysis"}
+          onClick={() => setActiveTab("analysis")}
+        >
+          {data.length > 0 && (
             <select
               className="company-dropdown"
-              value={selectedSupplier?.companyName || ""}
-              onChange={(e) => {
-                const companyName = e.target.value;
-                setSelectedSupplier(data.find((c) => c.companyName === companyName));
-                setActiveTab("analysis");
-              }}
+              value={selectedCompany}
+              onChange={(e) => setSelectedCompany(e.target.value)}
             >
-              <option value="" disabled>
-                TransGlobal Logistics
-              </option>
               {data.map((company, idx) => (
                 <option key={idx} value={company.companyName}>
                   {company.companyName}
                 </option>
               ))}
             </select>
-          </div>
-        </div>
+          )}
+        </NavItem>
 
-        {/* Route Management */}
-        <NavItem
-          icon={<Route size={18} />}
-          label="Route Management"
-          active={activeTab === "routes"}
-          onClick={() => setActiveTab("routes")}
-        />
-
-        {/* Logistics */}
+       
+        {/* Logistics → Redirect to /map */}
         <NavItem
           icon={<Truck size={18} />}
           label="Logistics"
           active={activeTab === "logistics"}
-          onClick={() => setActiveTab("logistics")}
+          onClick={() => navigate("/map")}
         />
 
         {/* Settings */}
@@ -83,6 +69,14 @@ const Sidebar = ({
           label="Settings"
           active={activeTab === "settings"}
           onClick={() => setActiveTab("settings")}
+        />
+
+        {/* ➕ Add Supplier (Redirect to /form) */}
+        <NavItem
+          icon={<Plus size={18} />}
+          label="Add Supplier"
+          active={false}
+          onClick={() => navigate("/form")}
         />
       </nav>
     </aside>
