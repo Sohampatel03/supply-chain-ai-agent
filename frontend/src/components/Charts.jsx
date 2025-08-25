@@ -77,39 +77,6 @@ const Charts = ({ data }) => {
         </ResponsiveContainer>
       </Card>
 
-      <Card className="chart-container chart-container-lg" title="Duration vs Distance Analysis" icon={<Route size={20} />}>
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={durationVsDistance} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-            <XAxis dataKey="name" stroke="#64748b" />
-            <YAxis stroke="#64748b" />
-            <Tooltip 
-              contentStyle={{ 
-                backgroundColor: 'rgba(255, 255, 255, 0.95)', 
-                border: '1px solid #e2e8f0',
-                borderRadius: '8px',
-                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-              }}
-            />
-            <Legend />
-            <Line 
-              type="monotone" 
-              dataKey="duration" 
-              stroke="#667eea" 
-              strokeWidth={3}
-              dot={{ fill: '#667eea', strokeWidth: 2, r: 4 }}
-            />
-            {/* The provided JSON does not include 'distanceKm', so this line will not render dynamic data */}
-            <Line 
-              type="monotone" 
-              dataKey="distance" 
-              stroke="#f59e0b" 
-              strokeWidth={3}
-              dot={{ fill: '#f59e0b', strokeWidth: 2, r: 4 }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </Card>
     </div>
   );
 };
