@@ -12,7 +12,7 @@ import ColorPalette from "./ColorPalette";
 const styles = `
 .dashboard-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: linear-gradient(135deg, rgba(246,252,255,0.97) 80%, #eaf6fa 100%);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
@@ -525,7 +525,7 @@ sidebar {
 `;
 
 // Enhanced Main Component
-export default function NewDashboard() {
+export default function newDashboard() {
   const [activeTab, setActiveTab] = React.useState('home');
 
   return (

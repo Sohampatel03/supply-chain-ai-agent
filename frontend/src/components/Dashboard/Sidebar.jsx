@@ -2,9 +2,9 @@ import React from 'react';
 
 const Sidebar = ({ section, setSection }) => {
   const sidebarItems = [
-    { key: "dashboard", label: "Dashboard" },
-    { key: "risk", label: "Risk Assessment" },
-    { key: "routes", label: "Routes" },
+    { key: "system", label: "System Analysis" },
+    { key: "routes", label: "Route Management" },
+    { key: "logistics", label: "Logistics" },
     { key: "settings", label: "Settings" },
   ];
 
@@ -16,6 +16,9 @@ const Sidebar = ({ section, setSection }) => {
         color: "white",
         padding: "0",
         flexShrink: 0,
+        height: "100vh", // ✅ full height of screen
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       <div
@@ -25,11 +28,13 @@ const Sidebar = ({ section, setSection }) => {
           padding: "1rem",
           borderBottom: "1px solid #34495e",
           backgroundColor: "#34495e",
+          textAlign: "center",
         }}
       >
-        Shrinkhla AI{" "}
+        Shrunkhla AI
       </div>
-      <nav style={{ padding: "1rem 0" }}>
+
+      <nav style={{ flex: 1 }}>
         <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
           {sidebarItems.map((item) => (
             <li
@@ -48,12 +53,12 @@ const Sidebar = ({ section, setSection }) => {
               onClick={() => setSection(item.key)}
               onMouseOver={(e) => {
                 if (section !== item.key) {
-                  e.target.style.backgroundColor = "#34495e";
+                  e.currentTarget.style.backgroundColor = "#34495e";
                 }
               }}
               onMouseOut={(e) => {
                 if (section !== item.key) {
-                  e.target.style.backgroundColor = "transparent";
+                  e.currentTarget.style.backgroundColor = "transparent";
                 }
               }}
             >

@@ -59,72 +59,7 @@ const ColorAnalysis = () => {
           </PieChart>
         </ResponsiveContainer>
       </Card>
-
-      <Card className="chart-container chart-container-lg" title="Color-Coded Risk Analysis" icon={<AlertTriangle size={20} />}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', height: '100%' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
-            <div style={{ 
-              background: 'linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)',
-              border: '2px solid #22c55e',
-              borderRadius: '12px',
-              padding: '1rem',
-              textAlign: 'center'
-            }}>
-              <div style={{ fontSize: '2rem', fontWeight: '700', color: '#166534' }}>95%</div>
-              <div style={{ fontSize: '0.875rem', color: '#166534', fontWeight: '500' }}>Primary Route</div>
-              <div style={{ fontSize: '0.75rem', color: '#15803d' }}>Excellent Reliability</div>
-            </div>
-            <div style={{ 
-              background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
-              border: '2px solid #f59e0b',
-              borderRadius: '12px',
-              padding: '1rem',
-              textAlign: 'center'
-            }}>
-              <div style={{ fontSize: '2rem', fontWeight: '700', color: '#92400e' }}>88%</div>
-              <div style={{ fontSize: '0.875rem', color: '#92400e', fontWeight: '500' }}>Alternate Route</div>
-              <div style={{ fontSize: '0.75rem', color: '#a16207' }}>Good Reliability</div>
-            </div>
-          </div>
-          <div style={{ 
-            background: 'linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)',
-            border: '2px solid #ef4444',
-            borderRadius: '12px',
-            padding: '1rem',
-            textAlign: 'center'
-          }}>
-            <div style={{ fontSize: '2rem', fontWeight: '700', color: '#b91c1c' }}>75%</div>
-            <div style={{ fontSize: '0.875rem', color: '#b91c1c', fontWeight: '500' }}>Emergency Route</div>
-            <div style={{ fontSize: '0.75rem', color: '#dc2626' }}>Moderate Reliability</div>
-          </div>
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(3, 1fr)', 
-            gap: '0.75rem',
-            marginTop: 'auto'
-          }}>
-            <div style={{ 
-              background: '#22c55e', 
-              height: '8px', 
-              borderRadius: '4px',
-              opacity: 0.95
-            }}></div>
-            <div style={{ 
-              background: '#f59e0b', 
-              height: '8px', 
-              borderRadius: '4px',
-              opacity: 0.88
-            }}></div>
-            <div style={{ 
-              background: '#ef4444', 
-              height: '8px', 
-              borderRadius: '4px',
-              opacity: 0.75
-            }}></div>
-          </div>
-        </div>
-      </Card>
-    </div>
+   </div>
   );
 };
 
