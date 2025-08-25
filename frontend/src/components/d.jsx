@@ -12,7 +12,7 @@ import Loader from "./loader";
 const styles = `
 .dashboard-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, rgba(246,252,255,0.97) 80%, #eaf6fa 100%);
+  background: radial-gradient(ellipse at top left, #b6f0ea 0%, #7db0c5 100%);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
