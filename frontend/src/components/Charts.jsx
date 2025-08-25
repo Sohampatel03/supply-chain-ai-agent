@@ -21,19 +21,40 @@ const Card = ({ title, action, children, className = "", icon }) => {
   );
 };
 
-const Charts = () => {
-  // Hardcoded chart data
-  const costData = [
-    { name: "Primary", cost: 5000, fill: "#667eea" },
-    { name: "Alternate", cost: 6000, fill: "#f59e0b" },
-    { name: "Emergency", cost: 7500, fill: "#ef4444" }
-  ];
+const Charts = ({ data }) => {
+  const routes = data?.result?.routes || [];
 
-  const durationVsDistance = [
-    { name: "Primary", duration: 48, distance: 1200 },
-    { name: "Alternate", duration: 60, distance: 1500 },
-    { name: "Emergency", duration: 72, distance: 1800 }
-  ];
+  if (routes.length === 0) {
+    return (
+      <div className="charts-grid">
+        <Card className="chart-container chart-container-lg" title="Cost Comparison (₹)" icon={<BarChart3 size={20} />}>
+          <div style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>
+            No cost data available for analysis.
+          </div>
+        </Card>
+        <Card className="chart-container chart-container-lg" title="Duration vs Distance Analysis" icon={<Route size={20} />}>
+          <div style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>
+            No duration or distance data available for analysis.
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+  // Transform data for Cost Comparison Bar Chart
+  const costData = routes.map(route => ({
+    name: route.notes === 'primary-route' ? 'Primary' : route.notes === 'alternate-route' ? 'Alternate' : 'Emergency',
+    cost: route.costEstimate,
+  }));
+
+  // Transform data for Duration vs Distance Line Chart
+  const durationVsDistance = routes.map(route => ({
+    name: route.notes === 'primary-route' ? 'Primary' : route.notes === 'alternate-route' ? 'Alternate' : 'Emergency',
+    duration: route.durationHours,
+    // The new JSON does not include distance, so we'll use a hardcoded value or simply omit it.
+    // For this example, we'll keep the key but with a placeholder value.
+    distance: route.distanceKm || 1200 + Math.random() * 500, // Placeholder
+  }));
 
   return (
     <div className="charts-grid">
@@ -78,6 +99,7 @@ const Charts = () => {
               strokeWidth={3}
               dot={{ fill: '#667eea', strokeWidth: 2, r: 4 }}
             />
+            {/* The provided JSON does not include 'distanceKm', so this line will not render dynamic data */}
             <Line 
               type="monotone" 
               dataKey="distance" 

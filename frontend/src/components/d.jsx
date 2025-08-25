@@ -1,5 +1,4 @@
-
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Topbar from "./Topbar";
 import Sidebar from "./Sidebar";
 import HeaderCards from "./HeaderCards";
@@ -526,27 +525,73 @@ sidebar {
 
 // Enhanced Main Component
 export default function NewDashboard() {
-  const [activeTab, setActiveTab] = React.useState('home');
+  const [activeTab, setActiveTab] = useState("home");
+  const [analysisData, setAnalysisData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [suppliers, setSuppliers] = useState([]);
+
+  useEffect(() => {
+    const fetchAnalysis = async () => {
+      try {
+        // 1️⃣ Fetch suppliers
+        const suppliersRes = await fetch("http://localhost:5000/api/suppliers", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // ensure token is stored at login
+          },
+        });
+        const suppliers = await suppliersRes.json();
+        setSuppliers(suppliers);
+        console.log("✅ Suppliers fetched:", suppliers);
+
+        if (!suppliers.length) {
+          console.warn("⚠️ No suppliers found");
+          setLoading(false);
+          return;
+        }
+
+        // 2️⃣ Pick first supplier ID (or you can add dropdown later for selection)
+        const supplierId = suppliers[0]._id;
+
+        // 3️⃣ Fetch analysis data
+        const analysisRes = await fetch(`http://localhost:5000/api/suppliers/${supplierId}/analysis`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        const analysis = await analysisRes.json();
+         console.log("✅ Analysis fetched:", analysis);
+
+        setAnalysisData(analysis); // ✅ Save for components
+        setLoading(false);
+      } catch (err) {
+        console.error("❌ Error fetching data:", err);
+        setLoading(false);
+      }
+    };
+
+    fetchAnalysis();
+  }, []);
+
+  if (loading) return <div className="p-4">Loading dashboard...</div>;
 
   return (
     <>
       <style>{styles}</style>
       <div className="dashboard-container">
         <Topbar />
-
         <div className="main-layout">
-          <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+          <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} data={suppliers} />
 
           <main className="main-content">
-            <HeaderCards />
-            <RouteCards />
-            <Charts />
-            <ColorAnalysis />
-            <ColorPalette />
+            {/* ✅ Pass fetched analysisData to components */}
+            <HeaderCards data={analysisData} />
+            <RouteCards data={analysisData} />
+            <Charts data={analysisData} />
+            {/* <ColorAnalysis data={analysisData} /> */}
+            {/* <ColorPalette data={analysisData} /> */}
           </main>
         </div>
       </div>
     </>
   );
 }
-

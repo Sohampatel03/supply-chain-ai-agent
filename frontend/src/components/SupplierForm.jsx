@@ -89,7 +89,7 @@ const SupplierForm = () => {
       const data = await res.json();
       console.log("Supplier added and analyzed:", data);
       alert("Supplier added successfully!");
-      navigate("/dashboard");
+      navigate("/dash");
 
     } catch (error) {
       console.error("Error adding supplier:", error);
